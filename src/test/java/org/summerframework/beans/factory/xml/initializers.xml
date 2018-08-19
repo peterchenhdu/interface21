@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2011-2025 PiChen
+  -->
+
+<!DOCTYPE beans PUBLIC  "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <bean id="init-method1"
+          class="org.summerframework.beans.factory.xml.XmlBeanFactoryTestSuite$DoubleInitializer"
+          init-method="init"
+    >
+        <property name="num">
+            <value>7</value>
+        </property>
+    </bean>
+
+    <bean id="init-method2"
+          class="org.summerframework.beans.factory.xml.XmlBeanFactoryTestSuite$BadInitializer"
+          init-method="init2"
+          singleton="false"
+    >
+    </bean>
+
+    <bean id="init-method3"
+          class="org.summerframework.beans.TestBean"
+          init-method="init"
+          singleton="false"
+    >
+    </bean>
+
+    <bean id="init-and-ib"
+          class="org.summerframework.beans.factory.xml.XmlBeanFactoryTestSuite$InitAndIB"
+          init-method="customInit"
+          destroy-method="customDestroy"
+    >
+    </bean>
+
+
+</beans>

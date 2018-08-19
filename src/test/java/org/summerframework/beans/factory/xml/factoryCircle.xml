@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2011-2025 PiChen
+  -->
+
+<!DOCTYPE beans PUBLIC  "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <bean id="singletonFactory" class="org.summerframework.beans.factory.DummyFactory">
+        <property name="otherFactory">
+            <ref bean="singletonFactory"/>
+        </property>
+    </bean>
+
+</beans>

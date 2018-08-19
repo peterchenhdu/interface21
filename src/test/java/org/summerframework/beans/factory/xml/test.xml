@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2011-2025 PiChen
+  -->
+
+<!DOCTYPE beans PUBLIC  "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <bean id="rod" class="org.summerframework.beans.TestBean">
+        <property name="name">
+            <value>Rod</value>
+        </property>
+        <property name="age">
+            <value>31</value>
+        </property>
+        <property name="spouse">
+            <ref external="father"/>
+        </property>
+    </bean>
+
+    <bean id="roderick" parent="rod">
+        <property name="name">
+            <value>Roderick</value>
+        </property>
+        <!-- Should inherit age -->
+    </bean>
+
+    <bean id="kerry" class="org.summerframework.beans.TestBean">
+        <property name="name">
+            <value>Kerry</value>
+        </property>
+        <property name="age">
+            <value>34</value>
+        </property>
+        <property name="spouse">
+            <ref bean="rod"/>
+        </property>
+    </bean>
+
+    <bean id="kathy" class="org.summerframework.beans.TestBean" singleton="false">
+        <property name="name">
+            <value>Kathy</value>
+        </property>
+        <property name="age">
+            <value>28</value>
+        </property>
+        <property name="spouse">
+            <ref external="father"/>
+        </property>
+    </bean>
+
+    <bean id="typeMismatch" class="org.summerframework.beans.TestBean" singleton="false">
+        <property name="name">
+            <value>typeMismatch</value>
+        </property>
+        <property name="age">
+            <value>34x</value>
+        </property>
+        <property name="spouse">
+            <ref bean="rod"/>
+        </property>
+    </bean>
+
+    <!--
+        Tests of lifecycle callbacks
+    -->
+    <bean id="mustBeInitialized" class="org.summerframework.beans.factory.MustBeInitialized">
+    </bean>
+
+    <bean id="lifecycle" class="org.summerframework.beans.factory.LifecycleBean">
+    </bean>
+
+
+    <!-- Factory beans are automatically treated differently -->
+    <bean id="singletonFactory" class="org.summerframework.beans.factory.DummyFactory">
+    </bean>
+
+    <bean id="prototypeFactory" class="org.summerframework.beans.factory.DummyFactory">
+        <property name="singleton">
+            <value>false</value>
+        </property>
+    </bean>
+
+    <bean id="factoryPassThrough"
+          class="org.summerframework.beans.factory.DummyFactory">
+        <property name="singleton">
+            <value>true</value>
+        </property>
+        <property name="propertyValues">
+            <value>name=passThrough</value>
+        </property>
+    </bean>
+
+    <!-- Check that the circular reference resolution mechanism doesn't break
+         repeated references to the same FactoryBean -->
+    <bean id="factoryReferencer" class="org.summerframework.beans.factory.xml.DummyReferencer">
+        <property name="testBean1">
+            <ref bean="singletonFactory"/>
+        </property>
+        <property name="testBean2">
+            <ref bean="singletonFactory"/>
+        </property>
+    </bean>
+
+    <!-- Check that the circular reference resolution mechanism doesn't break
+         prototype instantiation -->
+    <bean id="prototypeReferencer" class="org.summerframework.beans.factory.xml.DummyReferencer">
+        <property name="testBean1">
+            <ref bean="kathy"/>
+        </property>
+        <property name="testBean2">
+            <ref bean="kathy"/>
+        </property>
+    </bean>
+
+    <bean id="agistListener" class="org.summerframework.beans.factory.AbstractBeanFactoryTests$AgistListener"/>
+
+    <bean id="listenerVeto" class="org.summerframework.beans.TestBean">
+        <property name="name">
+            <value>listenerVeto</value>
+        </property>
+        <property name="age">
+            <value>66</value>
+        </property>
+    </bean>
+
+    <bean id="validEmpty" class="org.summerframework.beans.TestBean"/>
+
+
+</beans>
