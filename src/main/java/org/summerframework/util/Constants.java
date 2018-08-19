@@ -2,12 +2,10 @@
  * Copyright (c) 2011-2025 PiChen
  */
 
-/*
- * The Spring Framework is published under the terms
- * of the Apache Software License.
- */
-
 package org.summerframework.util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -15,98 +13,81 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class can be used to parse other classes containing constant definitions
- * in public static final members. The asXXXX() methods of this class allow these
- * constant values to be accessed via their string names.
+ * 解析类中的常量定义(public static final)
  * <p>
- * <p>Consider class Foo containing public final static int CONSTANT1 = 66;
- * An instance of this class wrapping Foo.class will return the
- * constant value of 66 from its asInt() method given the argument "CONSTANT1".
- * <p>
- * <p>This class is ideal for use in PropertyEditors, enabling them to recognize
- * the same names as the constants themselves, and freeing them from
- * maintaining their own mapping.
- * <p>
- * <p>TODO: add asBoolean, asDouble methods, keys method
  *
  * @author Rod Johnson
  * @version $Id$
  * @since 16-Mar-2003
  */
 public class Constants {
+    private static final Log LOGGER = LogFactory.getLog(Constants.class);
 
     /**
-     * Map from String field name to object value
+     * 存放常量的Map
      */
-    private Map map = new HashMap();
+    private Map<String, Object> map = new HashMap<>();
 
     /**
-     * Class analyzed
+     * 需要被解析的类
      */
     private final Class clazz;
 
     /**
-     * Create a new Constants converter class wrapping the given class.
-     * All public static final variables will be exposed, whatever their type.
+     * 构造方法.
      *
-     * @param clazz class to analyze.
+     * @param clazz 需要被解析的类.
      */
     public Constants(Class clazz) {
         this.clazz = clazz;
         Field[] fields = clazz.getFields();
-        for (int i = 0; i < fields.length; i++) {
-            Field f = fields[i];
-            if (Modifier.isFinal(f.getModifiers())
-                    && Modifier.isStatic(f.getModifiers())
-                    && Modifier.isPublic(f.getModifiers())) {
+        for (Field f : fields) {
+            int modifiers = f.getModifiers();
+            //public final static
+            if (Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers)) {
                 String name = f.getName();
                 try {
+                    //static , so param set to null
                     Object value = f.get(null);
                     map.put(name, value);
-                } catch (IllegalAccessException ex) {
+                } catch (IllegalAccessException e) {
                     // Just leave this field and continue
+                    LOGGER.error(e.toString(), e);
                 }
             }
         }
     } // constructor
 
     /**
-     * Return the number of constants exposed
+     * 获取常量map大小
      *
-     * @return int the number of constants exposed
+     * @return int map大小
      */
     public int getSize() {
         return this.map.size();
     }
 
-
-    //public String getKeys() {
-    //	throw new UnsupportedOperationException();
-    //}
-
     /**
-     * Return a constant value cast to an int
+     * 获取int常量
      *
-     * @param code name of the field
-     * @return int int value if successfuly
-     * @throws ConstantException if the field name wasn't found or
-     *                           if the type wasn't compatible with int
+     * @param code 常量名字
+     * @return int int值
+     * @throws ConstantException 找不到改常量或者类型不匹配
      * @see #asObject
      */
     public int asInt(String code) throws ConstantException {
         Object o = asObject(code);
         if (!(o instanceof Integer))
             throw new ConstantException(code, this.clazz, "not an int");
-        return ((Integer) o).intValue();
+        return (Integer) o;
     }
 
     /**
-     * Return a constant value as a String
+     * 获取字符串常量
      *
-     * @param code name of the field
-     * @return String string value if successful.
-     * Works even if it's not a string (invokes toString()).
-     * @throws ConstantException if the field name wasn't found
+     * @param code 常量名字
+     * @return String 常量值.
+     * @throws ConstantException 找不到改常量
      * @see #asObject
      */
     public String asString(String code) throws ConstantException {
@@ -115,11 +96,9 @@ public class Constants {
     }
 
     /**
-     * Parse the given string (upper or lower case accepted) and return
-     * the appropriate value if it's the name of a constant field in the
-     * class we're analysing.
+     * 根据常量名获取常量对象.
      *
-     * @throws ConstantException if there's no such field
+     * @throws ConstantException 找不到改常量
      */
     public Object asObject(String code) throws ConstantException {
         code = code.toUpperCase();

@@ -7,8 +7,7 @@ package org.summerframework.util;
 import java.io.InputStream;
 
 /**
- * Utility class for class loading, and for diagnostic purposes
- * to analyze the ClassLoader hierarchy for any object.
+ * 类加载相关工具类.
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -17,8 +16,10 @@ import java.io.InputStream;
 public abstract class ClassLoaderUtils {
 
     /**
-     * Load a resource from the classpath, first trying the thread context
-     * class loader, then the class loader of the given class.
+     * 从classpath下加载资源
+     * <p>
+     * 1、当前线程环境类加载器，
+     * 2、参数类的加载器
      *
      * @param clazz a class to try the class loader of
      * @param name  the resource name
@@ -34,7 +35,7 @@ public abstract class ClassLoaderUtils {
     }
 
     /**
-     * Show the class loader hierarchy for this class.
+     * 获取类加载器加载信息.
      *
      * @param obj     object to analyze loader hierarchy for
      * @param role    a description of the role of this class in the application

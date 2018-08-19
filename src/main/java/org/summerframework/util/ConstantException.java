@@ -10,8 +10,7 @@
 package org.summerframework.util;
 
 /**
- * Exception thrown when the Constants class is asked for an invalid
- * constant name.
+ * 常量异常.
  *
  * @author Rod Johnson
  * @version $Id$
