@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+        "https://raw.githubusercontent.com/peterchenhdu/interface21/master/interface21-framework/src/main/java/com/interface21/beans/factory/xml/spring-beans.dtd">
 
 <!--
   - Root application context definition for a test app that uses JDBC.

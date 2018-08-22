@@ -4,13 +4,13 @@
 
 package com.interface21.beans.factory.xml;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * EntityResolver implementation for the Spring beans DTD,
@@ -19,7 +19,7 @@ import org.xml.sax.InputSource;
  * <p>Fetches "spring-beans.dtd" from the classpath resource
  * "/com/interface21/beans/factory/xml/spring-beans.dtd",
  * no matter if specified as some local URL or as
- * "http://www.springframework.org/dtd/spring-beans.dtd".
+ * "https://raw.githubusercontent.com/peterchenhdu/interface21/master/interface21-framework/src/main/java/com/interface21/beans/factory/xml/spring-beans.dtd".
  *
  * @author Juergen Hoeller
  * @since 04.06.2003
