@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2011-2025 PiChen
+  -->
+
+<!DOCTYPE beans PUBLIC  "-//SPRING//DTD BEAN//EN"
+        "http://www.springframework.org/dtd/http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+
+    <bean id="jenny" class="com.interface21.beans.TestBean">
+        <property name="name">
+            <value>Jenny</value>
+        </property>
+        <property name="age">
+            <value>30</value>
+        </property>
+        <property name="spouse">
+            <!-- Could use id and href -->
+            <ref bean="david"/>
+        </property>
+    </bean>
+
+    <bean id="david" class="com.interface21.beans.TestBean">
+        <property name="name">
+            <value>David</value>
+        </property>
+        <property name="age">
+            <value>27</value>
+        </property>
+    </bean>
+
+    <bean id="rod" class="com.interface21.beans.TestBean">
+        <property name="name">
+            <value>Rod</value>
+        </property>
+        <property name="age">
+            <value>32</value>
+        </property>
+        <property name="friends">
+            <list>
+                <ref bean="jenny"/>
+                <ref bean="david"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        Try setting a collection property to a single value
+    -->
+    <bean id="loner" class="com.interface21.beans.TestBean">
+        <property name="name">
+            <value>loner</value>
+        </property>
+        <property name="age">
+            <value>26</value>
+        </property>
+        <property name="friends">
+            <list>
+                <ref bean="david"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="jumble" class="com.interface21.beans.factory.xml.MixedCollectionBean">
+        <property name="jumble">
+            <list>
+                <ref bean="david"/>
+                <value>literal</value>
+                <ref bean="jenny"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="verbose" class="com.interface21.beans.TestBean">
+        <property name="name">
+            <value>verbose</value>
+        </property>
+    </bean>
+
+    <!--
+        Check automatic creation of alias, to allow for
+        names that are illegal as XML ids
+    -->
+    <bean id="aliased" class="com.interface21.beans.TestBean"
+          name="I have an alias">
+        <property name="name">
+            <value>aliased</value>
+        </property>
+    </bean>
+
+    <bean id="emptyMap" class="com.interface21.beans.factory.HasMap">
+        <property name="map">
+            <map>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="literalMap" class="com.interface21.beans.factory.HasMap">
+        <property name="map">
+            <map>
+                <entry key="foo">
+                    <value>bar</value>
+                </entry>
+                <entry key="fi">
+                    <value>fum</value>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="mixedMap" class="com.interface21.beans.factory.HasMap">
+        <property name="map">
+            <map>
+                <entry key="foo">
+                    <value>bar</value>
+                </entry>
+                <entry key="jenny">
+                    <ref bean="jenny"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="mixedMapWithList" class="com.interface21.beans.factory.HasMap">
+        <property name="map">
+            <map>
+                <entry key="foo">
+                    <value>bar</value>
+                </entry>
+                <entry key="jenny">
+                    <ref bean="jenny"/>
+                </entry>
+                <entry key="list">
+                    <list>
+                        <value>zero</value>
+                        <ref bean="jenny"/>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="emptyProps" class="com.interface21.beans.factory.HasMap">
+        <property name="map">
+            <props>
+            </props>
+        </property>
+    </bean>
+
+
+    <bean id="props" class="com.interface21.beans.factory.HasMap">
+        <property name="map">
+            <props>
+                <prop key="foo">bar</prop>
+                <prop key="2">TWO</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="objectArray" class="com.interface21.beans.factory.HasMap">
+        <property name="objectArray">
+            <list>
+                <value>one</value>
+                <ref bean="jenny"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="classArray" class="com.interface21.beans.factory.HasMap">
+        <property name="classArray">
+            <list>
+                <value>java.lang.String</value>
+                <value>java.lang.Exception</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+    Why does this fail with arrayStoreException? Seems like no
+    conversion takes place? RJ, June 7 03
+    <bean id="integerArray" class="com.interface21.beans.factory.HasMap">
+        <property name="integerArray">
+            <list>
+                <value>0</value>
+                <value>1</value>
+                <value>2</value>
+            </list>
+        </property>
+    </bean>
+    -->
+
+</beans>		
+	
+	

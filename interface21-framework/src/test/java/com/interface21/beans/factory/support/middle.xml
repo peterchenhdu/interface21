@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2011-2025 PiChen
+  -->
+
+<!DOCTYPE beans PUBLIC  "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!-- Simple target -->
+    <bean id="test" class="com.interface21.beans.TestBean">
+        <property name="name">
+            <value>custom</value>
+        </property>
+        <property name="age">
+            <value>666</value>
+        </property>
+    </bean>
+
+
+    <!--
+        Check that invoker is automatically added to wrap target.
+        Non pointcut bean name should be wrapped in invoker.
+    -->
+    <bean id="numberTestBean"
+          class="com.interface21.beans.NumberTestBean"
+    >
+
+
+    </bean>
+
+
+</beans>		
+	
+	

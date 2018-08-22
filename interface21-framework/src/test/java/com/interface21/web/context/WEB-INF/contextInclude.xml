@@ -1,0 +1,12 @@
+<!--
+  ~ Copyright (c) 2011-2025 PiChen
+  -->
+
+<!-- Include snippet to be loaded via entity reference in applicationContext.xml -->
+
+<bean id="father" class="com.interface21.beans.TestBean">
+    <property name="name">
+        <value>yetanotherdummy</value>
+    </property>
+</bean>
+
