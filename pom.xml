@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.interface21</groupId>
-    <artifactId>interface21-parent</artifactId>
+    <artifactId>interface21</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>interface21-parent</name>
+    <name>interface21</name>
 
     <modules>
         <module>interface21-framework</module>

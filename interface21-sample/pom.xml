@@ -3,7 +3,7 @@
 
     <parent>
         <groupId>com.interface21</groupId>
-        <artifactId>interface21-parent</artifactId>
+        <artifactId>interface21</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 

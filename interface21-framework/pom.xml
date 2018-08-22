@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <groupId>com.interface21</groupId>
-        <artifactId>interface21-parent</artifactId>
+        <artifactId>interface21</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 

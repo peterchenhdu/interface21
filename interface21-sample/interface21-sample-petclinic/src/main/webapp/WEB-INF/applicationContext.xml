@@ -106,7 +106,7 @@
     -->
 
     <!-- petclinic primary Business Object : Default implementation -->
-    <bean id="clinic" class="petclinic.jdbc.HsqlClinic">
+    <bean id="clinic" class="petclinic.jdbc.MysqlClinic">
         <property name="dataSource">
             <ref bean="dataSource"/>
         </property>
