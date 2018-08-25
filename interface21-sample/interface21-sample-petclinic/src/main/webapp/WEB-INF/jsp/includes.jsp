@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ page session="false" %>
 
 <%@ taglib prefix="spring" uri="/spring" %>

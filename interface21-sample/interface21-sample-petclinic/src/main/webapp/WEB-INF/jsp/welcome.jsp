@@ -2,11 +2,11 @@
 
 <H2><fmt:message key="welcome"/></H2>
 <P>
-    <A href="<c:url value="/findOwners.htm"/>">Find owner</A>
+    <A href="<c:url value="/findOwners.htm"/>"><fmt:message key="find.owner"/></A>
 <P>
-    <A href="<c:url value="/vets.htm"/>">Display all veterinarians</A>
+    <A href="<c:url value="/vets.htm"/>"><fmt:message key="display.all.veterinarians"/></A>
 <P>
-    <A href="<c:url value="/html/petclinic.html"/>">Tutorial</A>
+    <A href="<c:url value="/html/petclinic.html"/>"><fmt:message key="tutorial"/></A>
 <P>
-    <A href="<c:url value="/docs/index.html"/>">Documentation</A>
+    <A href="<c:url value="/doc/Spring-MVC-step-by-step.html"/>"><fmt:message key="documentation"/></A>
 
