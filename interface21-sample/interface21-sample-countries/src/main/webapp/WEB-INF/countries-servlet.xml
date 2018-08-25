@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "https://raw.githubusercontent.com/peterchenhdu/interface21/master/interface21-framework/src/main/java/com/interface21/beans/factory/xml/spring-beans.dtd">
+
+<beans>
+
+    <!-- ===========================================================-->
+    <!-- Views														-->
+    <!-- ===========================================================-->
+    <!-- Explicit view mappings in bundle instead of default InternalResourceViewResolver.
+      - Fetches the view mappings from localized "views_xx" classpath files, i.e.
+      - "/WEB-INF/classes/views-countries.properties" or "/WEB-INF/classes/views-countries_fr.properties".
+      -
+      - Symbolic view names returned by controllers will be resolved in the respective
+      - properties file, allowing for arbitrary mappings between names and resources.
+      -
+      - We use the "defaultParentView" property. All views defined will inherit by default the properties
+      - defined in the "modelView" view.
+      -->
+    <bean id="viewResolver" class="com.interface21.web.servlet.view.ResourceBundleViewResolver">
+        <property name="basename">
+            <value>views-countries</value>
+        </property>
+        <property name="defaultParentView">
+            <value>modelView</value>
+        </property>
+    </bean>
+
+    <!-- ===========================================================-->
+    <!-- Resolvers													-->
+    <!-- ===========================================================-->
+    <!-- We specify here that Locale and theme are stored in cookies.
+         They could be stored in a Session. Default resolvers don't allow changing them on the fly.
+    -->
+    <bean id="localeResolver" class="com.interface21.web.servlet.i18n.CookieLocaleResolver"/>
+    <bean id="themeResolver" class="com.interface21.web.servlet.theme.CookieThemeResolver"/>
+
+    <!-- ===========================================================-->
+    <!-- Interceptors												-->
+    <!-- ===========================================================-->
+    <!-- Interceptors will pre-handle any request in this servlet, no matter which is the controller
+         mapped for this request.
+         We use two built-in interceptors to detect user locale or theme change requests.
+
+         The third interceptor is specific to this Demo. It allows views to easily be aware
+         about the configuration detected. Precisely to know if a copy data to database can be
+         proposed to the user.
+    -->
+    <bean id="localeChangeInterceptor" class="com.interface21.web.servlet.i18n.LocaleChangeInterceptor"/>
+    <bean id="themeChangeInterceptor" class="com.interface21.web.servlet.theme.ThemeChangeInterceptor"/>
+    <bean id="copyInterceptor" class="com.interface21.samples.countries.web.CopyInterceptor"/>
+
+    <!-- ===========================================================-->
+    <!-- Mapping													-->
+    <!-- ===========================================================-->
+    <!--
+     - Explicit URL handler mapping instead of default BeanNameUrlHandlerMapping.
+     -->
+    <bean id="urlMapping" class="com.interface21.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <ref bean="localeChangeInterceptor"/>
+                <ref bean="themeChangeInterceptor"/>
+                <ref bean="copyInterceptor"/>
+            </list>
+        </property>
+        <property name="mappings">
+            <props>
+                <prop key="/home.htm">countriesController</prop>
+                <prop key="/config.htm">countriesController</prop>
+                <prop key="/copy.htm">countriesController</prop>
+                <prop key="/main/home.htm">countriesController</prop>
+                <prop key="/main/detail.htm">countriesController</prop>
+                <prop key="/main/countries.xls">countriesController</prop>
+                <prop key="/main/countries.pdf">countriesController</prop>
+                <prop key="/notfound.htm">errorsController</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- ===========================================================-->
+    <!-- Controllers												-->
+    <!-- ===========================================================-->
+    <!-- MultiControllers need a MethodNameResolver to mapping URLs to methods. -->
+
+    <!-- ===========================================================-->
+    <!-- General use Multiaction controller for Errors -->
+
+    <bean id="errorsMethodNameResolver"
+          class="com.interface21.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
+        <property name="mappings">
+            <props>
+                <prop key="/notfound.htm">handleHttp404</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="errorsController" class="com.interface21.samples.countries.web.ErrorsController">
+        <property name="methodNameResolver">
+            <ref bean="errorsMethodNameResolver"/>
+        </property>
+    </bean>
+
+    <!-- ===========================================================-->
+    <!-- Application specific Multiaction controller -->
+
+    <bean id="countriesMethodNameResolver"
+          class="com.interface21.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
+        <property name="mappings">
+            <props>
+                <prop key="/home.htm">handleHome</prop>
+                <prop key="/config.htm">handleConfig</prop>
+                <prop key="/copy.htm">handleCopy</prop>
+                <prop key="/main/home.htm">handleMain</prop>
+                <prop key="/main/detail.htm">handleDetail</prop>
+                <prop key="/main/countries.xls">handleExcel</prop>
+                <prop key="/main/countries.pdf">handlePdf</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- The controller will have to specify the "secondDaoCountry" property only in the scenario 2 (MEMORY+DATABASE).
+         The two others properties "methodNameResolver" and "countryDao" are always set, no matter of the scenario.
+
+         NOTICE that parametrizing here has not to be changed when switching from scenario 1 (Memory) to
+         scenario 3 (Database).
+         The "daoCountry" implementation is not the same, but it's only an affair of its own setting.
+    -->
+
+    <bean id="countriesController" class="com.interface21.samples.countries.web.CountriesController">
+        <property name="methodNameResolver">
+            <ref bean="countriesMethodNameResolver"/>
+        </property>
+        <property name="daoCountry">
+            <ref external="daoCountry"/>
+        </property>
+        <!-- Uncomment for MEMORY+DATABASE IMPLEMENTATION scenario 2 -->
+        <!-- <property name="secondDaoCountry"><ref external="secondDaoCountry"/></property> -->
+    </bean>
+
+
+</beans>

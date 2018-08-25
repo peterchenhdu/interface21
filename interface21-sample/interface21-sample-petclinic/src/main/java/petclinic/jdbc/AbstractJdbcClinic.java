@@ -341,11 +341,10 @@ abstract public class AbstractJdbcClinic implements Clinic, InitializingBean {
      * @return Map containing Entitys
      */
     protected final Map mapEntityList(List list) {
-        Map map = new HashMap();
-        Iterator iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Entity entity = (Entity) iterator.next();
-            map.put(new Integer(entity.getId()), entity);
+        Map<Integer, Entity> map = new HashMap<>();
+        for (Object aList : list) {
+            Entity entity = (Entity) aList;
+            map.put(entity.getId(), entity);
         }
         return map;
     }

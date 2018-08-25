@@ -15,6 +15,7 @@
 
     <modules>
         <module>interface21-sample-petclinic</module>
+        <module>interface21-sample-countries</module>
     </modules>
 
 

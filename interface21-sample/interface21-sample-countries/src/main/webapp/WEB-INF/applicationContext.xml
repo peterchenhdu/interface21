@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "https://raw.githubusercontent.com/peterchenhdu/interface21/master/interface21-framework/src/main/java/com/interface21/beans/factory/xml/spring-beans.dtd">
+
+<!--
+  - Root application context definition for a web app that uses JDBC.
+  -
+  - Does not depend on web infrastructure or any web-specific classes!
+  - Assumes running in a J2EE environment in the "dataSource" definition, as
+  - it looks for a "java:comp/env/jdbc/myds" JNDI DataSource, but that can be
+  - replaced easily (as noted). Such a context definition can thus be reused
+  - in test environments or standalone applications without any hassle.
+  -
+  - We put the "application" beans in this file. Only beans needed for the application will stay
+  - here and avoid any Web related bean which will be configured in their servlet configuration 
+  - (ie countries-servlet.xml).
+  - We start with the DATA layer. After comes the BUSINESS layer (non existent for this tiny application).
+  - As explained above, the INTERFACE or CLIENT levels will be done in countries-servlet.xml.   
+  -
+  - If an application is only developped for web environnement, it may be possible to define here
+  - some general web beans reused in different servlets.
+  -
+  -->
+
+<beans>
+
+    <!-- ========================= GENERAL DEFINITIONS ========================= -->
+
+    <!--
+      - The message source for this context, loaded from localized "messages_xx" files
+      - in the classpath, i.e. "/WEB-INF/classes/messages.properties" or
+      - "/WEB-INF/classes/messages_fr.properties".
+      -
+      - "getMessage" calls to this context will use this source.
+      - Child contexts can have their own message sources, inheriting all messages from this
+      - source, being able to define new messages and override ones defined in this source.
+      -
+      - We have no need for application messages in this tiny application, so this definition
+      - will simply be used by the next level (web - - countries-servlet.xml).
+      -->
+    <bean id="messageSource" class="com.interface21.context.support.ResourceBundleMessageSource">
+        <property name="basename">
+            <value>messages</value>
+        </property>
+    </bean>
+
+    <!-- ========================= DATA LAYER DEFINITIONS ========================= -->
+    <!-- For the simplicity of configuration change, the three scenarios are done separately.
+         But take a look to see the differences between the sections.
+         By example: switching from inMemory(1) to database(3) has only these changes:
+           - Modifying the class of the "daoCountry" bean.
+           - Defining a "dataSource" bean.
+           - Adding the previously defined bean "dataSource" as parameter of "daoCountry" bean.
+
+        By default, the scenario 1 is not commented. For testing another scenario, please
+        comment the current scenario and uncomment this you will run.
+     -->
+
+    <!-- === SCENARIO 1 === -->
+    <!-- ====================== In memory only version ====================== -->
+
+    <bean id="daoCountry" class="com.interface21.samples.countries.dao.DaoCountryMem" singleton="true"/>
+
+
+    <!-- For database mapping, we rely on the JNDI location "(java:comp/env/)jdbc/countries-ds".
+        So changing the real database used is only a matter of mapping this JNDI location.
+        For JBoss, it is done in the provided "jboss-web.xml" file which has to be copied in this
+        directory.
+    -->
+
+    <!-- === SCENARIO 2 === -->
+    <!-- ============= In memory + Database version for copying ============= -->
+    <!--
+    <bean id="dataSource" class="com.interface21.jndi.JndiObjectFactoryBean">
+        <property name="jndiName"><value>jdbc/countries-ds</value></property>
+    </bean>
+    <bean id="daoCountry" class="com.interface21.samples.countries.dao.DaoCountryMem" singleton="true"/>
+    <bean id="secondDaoCountry" class="com.interface21.samples.countries.dao.DaoCountryJdbc" singleton="true">
+        <property name="dataSource"><ref bean="dataSource"/></property>
+        <property name="dropSql"><value>DROP TABLE countries</value></property>
+        <property name="createSql"><value>CREATE TABLE countries (lang CHAR(2), code CHAR(2), name VARCHAR(50))</value></property>
+    </bean>
+    -->
+
+    <!-- === SCENARIO 3 === -->
+    <!-- ======================= Database only version ====================== -->
+    <!--
+    <bean id="dataSource" class="com.interface21.jndi.JndiObjectFactoryBean">
+        <property name="jndiName"><value>jdbc/countries-ds</value></property>
+    </bean>
+    <bean id="daoCountry" class="com.interface21.samples.countries.dao.DaoCountryJdbc" singleton="true">
+        <property name="dataSource"><ref bean="dataSource"/></property>
+    </bean>
+    -->
+
+
+    <!-- ========================= BUSINESS LAYER DEFINITIONS ========================= -->
+    <!-- We have nothing in this layer here.
+    -->
+
+</beans>
