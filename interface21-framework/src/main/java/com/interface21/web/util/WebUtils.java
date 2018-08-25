@@ -120,9 +120,9 @@ public abstract class WebUtils {
     public static Cookie getCookie(HttpServletRequest request, String name) {
         Cookie cookies[] = request.getCookies();
         if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                if (name.equals(cookies[i].getName()))
-                    return cookies[i];
+            for (Cookie cooky : cookies) {
+                if (name.equals(cooky.getName()))
+                    return cooky;
             }
         }
         return null;
@@ -208,10 +208,9 @@ public abstract class WebUtils {
      */
     public static String getDirectoryForServletPath(String servletPath) {
         // Arg will be of form /dog/cat.jsp. We want to see /dog/
-        if (servletPath == null || servletPath.indexOf("/") == -1)
+        if (servletPath == null || !servletPath.contains("/"))
             return "/";
-        String left = servletPath.substring(0, servletPath.lastIndexOf("/") + 1);
-        return left;
+        return servletPath.substring(0, servletPath.lastIndexOf("/") + 1);
     }
 
     /**
@@ -228,12 +227,12 @@ public abstract class WebUtils {
      */
     public static Map getParametersStartingWith(ServletRequest request, String base) {
         Enumeration tmpEnum = request.getParameterNames();
-        Map params = new HashMap();
+        Map<String, Object> params = new HashMap<>();
         if (base == null)
             base = "";
         while (tmpEnum != null && tmpEnum.hasMoreElements()) {
             String paramName = (String) tmpEnum.nextElement();
-            if (base == null || "".equals(base) || paramName.startsWith(base)) {
+            if ("".equals(base) || paramName.startsWith(base)) {
                 String unprefixed = paramName.substring(base.length());
                 String[] values = request.getParameterValues(paramName);
                 if (values == null) {

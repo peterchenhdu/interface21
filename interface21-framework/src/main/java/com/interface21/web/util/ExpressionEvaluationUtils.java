@@ -4,10 +4,10 @@
 
 package com.interface21.web.util;
 
+import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
+
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
-
-import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 
 /**
  * Convenience methods for easy access to the JSP Expression Language
@@ -81,7 +81,7 @@ public abstract class ExpressionEvaluationUtils {
     public static int evaluateInteger(String attrName, String attrValue, PageContext pageContext)
             throws JspException {
         if (isExpressionLanguage(attrValue))
-            return ((Integer) ExpressionEvaluationHelper.evaluate(attrName, attrValue, Integer.class, pageContext)).intValue();
+            return (Integer) ExpressionEvaluationHelper.evaluate(attrName, attrValue, Integer.class, pageContext);
         else
             return Integer.parseInt(attrValue);
     }
@@ -98,9 +98,9 @@ public abstract class ExpressionEvaluationUtils {
     public static boolean evaluateBoolean(String attrName, String attrValue, PageContext pageContext)
             throws JspException {
         if (isExpressionLanguage(attrValue))
-            return ((Boolean) ExpressionEvaluationHelper.evaluate(attrName, attrValue, Boolean.class, pageContext)).booleanValue();
+            return (Boolean) ExpressionEvaluationHelper.evaluate(attrName, attrValue, Boolean.class, pageContext);
         else
-            return Boolean.valueOf(attrValue).booleanValue();
+            return Boolean.valueOf(attrValue);
     }
 
 
