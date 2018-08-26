@@ -9,43 +9,27 @@
 
 package com.interface21.beans.factory.xml;
 
+import com.interface21.beans.*;
+import com.interface21.beans.factory.BeanDefinitionStoreException;
+import com.interface21.beans.factory.BeanFactory;
+import com.interface21.beans.factory.support.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.w3c.dom.*;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import com.interface21.beans.PropertyValue;
-import com.interface21.beans.factory.BeanDefinitionStoreException;
-import com.interface21.beans.factory.BeanFactory;
-import com.interface21.beans.factory.support.ChildBeanDefinition;
-import com.interface21.beans.factory.support.RootBeanDefinition;
-import com.interface21.beans.factory.support.RuntimeBeanReference;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import com.interface21.beans.BeansException;
-import com.interface21.beans.FatalBeanException;
-import com.interface21.beans.PropertyValues;
-import com.interface21.beans.factory.support.ManagedList;
-import com.interface21.beans.factory.support.ManagedMap;
-import com.interface21.beans.MutablePropertyValues;
-import com.interface21.beans.factory.support.AbstractBeanDefinition;
-import com.interface21.beans.factory.support.ListableBeanFactoryImpl;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.EntityResolver;
 
 /**
  * Extension of ListableBeanFactoryImpl that reads bean definitions in an XML
@@ -248,8 +232,7 @@ public class XmlBeanFactory extends ListableBeanFactoryImpl {
             throw new BeanDefinitionStoreException("IOException parsing XML document", ex);
         } finally {
             try {
-                if (is != null)
-                    is.close();
+                is.close();
             } catch (IOException ex) {
                 throw new FatalBeanException("IOException closing stream for XML document", ex);
             }
@@ -423,7 +406,7 @@ public class XmlBeanFactory extends ListableBeanFactoryImpl {
     }
 
     private Map getMap(Element mapEle) {
-        ManagedMap m = new ManagedMap();
+        ManagedMap<String, Object> m = new ManagedMap<>();
         NodeList nl = mapEle.getElementsByTagName(ENTRY_ELEMENT);
         for (int i = 0; i < nl.getLength(); i++) {
             Element entryEle = (Element) nl.item(i);

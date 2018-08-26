@@ -9,24 +9,17 @@
 
 package com.interface21.beans.factory.support;
 
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Set;
-
+import com.interface21.beans.BeansException;
+import com.interface21.beans.FatalBeanException;
+import com.interface21.beans.MutablePropertyValues;
 import com.interface21.beans.PropertyValue;
 import com.interface21.beans.factory.BeanFactory;
 import com.interface21.beans.factory.ListableBeanFactory;
 import com.interface21.beans.factory.NoSuchBeanDefinitionException;
 import com.interface21.context.support.BeanFactoryPostProcessor;
 import com.interface21.util.StringUtils;
-import com.interface21.beans.BeansException;
-import com.interface21.beans.FatalBeanException;
-import com.interface21.beans.MutablePropertyValues;
+
+import java.util.*;
 
 /**
  * Concrete implementation of ListableBeanFactory.
@@ -199,10 +192,10 @@ public class ListableBeanFactoryImpl extends AbstractBeanFactory implements List
         // Ensure that unreferenced singletons are instantiated
         logger.info("Instantiating singletons in factory [" + this + "]");
         String[] beanNames = getBeanDefinitionNames();
-        for (int i = 0; i < beanNames.length; i++) {
-            AbstractBeanDefinition bd = getBeanDefinition(beanNames[i]);
+        for (String beanName : beanNames) {
+            AbstractBeanDefinition bd = getBeanDefinition(beanName);
             if (bd.isSingleton()) {
-                getBean(beanNames[i]);
+                getBean(beanName);
             }
         }
     }
@@ -240,9 +233,8 @@ public class ListableBeanFactoryImpl extends AbstractBeanFactory implements List
         int beanCount = 0;
 
         Set keys = m.keySet();
-        Iterator itr = keys.iterator();
-        while (itr.hasNext()) {
-            String key = (String) itr.next();
+        for (Object key1 : keys) {
+            String key = (String) key1;
             if (key.startsWith(prefix)) {
                 // Key is of form prefix<name>.property
                 String nameAndProperty = key.substring(prefix.length());
@@ -281,9 +273,8 @@ public class ListableBeanFactoryImpl extends AbstractBeanFactory implements List
 
         MutablePropertyValues pvs = new MutablePropertyValues();
         Set keys = m.keySet();
-        Iterator itr = keys.iterator();
-        while (itr.hasNext()) {
-            String key = (String) itr.next();
+        for (Object key1 : keys) {
+            String key = (String) key1;
             if (key.startsWith(prefix + SEPARATOR)) {
                 String property = key.substring(prefix.length() + SEPARATOR.length());
                 if (property.equals(CLASS_KEY)) {
@@ -357,7 +348,7 @@ public class ListableBeanFactoryImpl extends AbstractBeanFactory implements List
      */
     public final int registerBeanDefinitions(ResourceBundle rb, String prefix) throws BeansException {
         // Simply create a map and call overloaded method
-        Map m = new HashMap();
+        Map<String, Object> m = new HashMap<>();
         Enumeration keys = rb.getKeys();
         while (keys.hasMoreElements()) {
             String key = (String) keys.nextElement();

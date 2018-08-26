@@ -19,6 +19,6 @@ import java.util.HashMap;
  * @version $Id$
  * @since 27-May-2003
  */
-public class ManagedMap extends HashMap {
+public class ManagedMap<K,V> extends HashMap<K,V> {
 
 }

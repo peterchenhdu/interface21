@@ -9,15 +9,10 @@
 
 package com.interface21.beans.factory.support;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import com.interface21.beans.factory.HierarchicalBeanFactory;
 import com.interface21.beans.factory.ListableBeanFactory;
+
+import java.util.*;
 
 /**
  * Convenience methods operating on bean factories.
@@ -45,9 +40,9 @@ public abstract class BeanFactoryUtils {
      */
     public static List beansOfType(Class type, ListableBeanFactory lbf) {
         String[] beanNames = lbf.getBeanDefinitionNames(type);
-        List l = new ArrayList(beanNames.length);
-        for (int i = 0; i < beanNames.length; i++) {
-            l.add(lbf.getBean(beanNames[i]));
+        List<Object> l = new ArrayList<>(beanNames.length);
+        for (String beanName : beanNames) {
+            l.add(lbf.getBean(beanName));
         }
         return l;
     }
@@ -63,7 +58,7 @@ public abstract class BeanFactoryUtils {
      */
     public static List beansOfTypeIncludingAncestors(Class type, ListableBeanFactory lbf) {
         Collection beanNames = beanNamesIncludingAncestors(type, lbf);
-        List l = new ArrayList(beanNames.size());
+        List<Object> l = new ArrayList<>(beanNames.size());
         Iterator itr = beanNames.iterator();
         for (int i = 0; itr.hasNext(); i++) {
             l.add(lbf.getBean((String) itr.next()));
@@ -96,9 +91,7 @@ public abstract class BeanFactoryUtils {
         // Set of bean names: a set is used to ensure uniqueness
         Set s = new HashSet();
         String[] names = lbf.getBeanDefinitionNames();
-        for (int i = 0; i < names.length; i++) {
-            s.add(names[i]);
-        }
+        Collections.addAll(s, names);
         if (lbf instanceof HierarchicalBeanFactory) {
             HierarchicalBeanFactory hbf = (HierarchicalBeanFactory) lbf;
             if (hbf.getParentBeanFactory() != null && hbf.getParentBeanFactory() instanceof ListableBeanFactory) {
@@ -121,9 +114,7 @@ public abstract class BeanFactoryUtils {
         // Set of bean names: a set is used to ensure uniqueness
         Set s = new HashSet();
         String[] names = lbf.getBeanDefinitionNames(type);
-        for (int i = 0; i < names.length; i++) {
-            s.add(names[i]);
-        }
+        Collections.addAll(s, names);
         if (lbf instanceof HierarchicalBeanFactory) {
             HierarchicalBeanFactory hbf = (HierarchicalBeanFactory) lbf;
             if (hbf.getParentBeanFactory() != null && hbf.getParentBeanFactory() instanceof ListableBeanFactory) {

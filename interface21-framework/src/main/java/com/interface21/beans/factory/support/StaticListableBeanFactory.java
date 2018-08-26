@@ -4,18 +4,13 @@
 
 package com.interface21.beans.factory.support;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import com.interface21.beans.BeansException;
 import com.interface21.beans.factory.BeanFactory;
+import com.interface21.beans.factory.BeanNotOfRequiredTypeException;
 import com.interface21.beans.factory.ListableBeanFactory;
 import com.interface21.beans.factory.NoSuchBeanDefinitionException;
-import com.interface21.beans.BeansException;
-import com.interface21.beans.factory.BeanNotOfRequiredTypeException;
+
+import java.util.*;
 
 /**
  * Singleton only.
@@ -55,9 +50,8 @@ public class StaticListableBeanFactory implements ListableBeanFactory {
 
         Set keys = beans.keySet();
         List matches = new LinkedList();
-        Iterator itr = keys.iterator();
-        while (itr.hasNext()) {
-            String name = (String) itr.next();
+        for (Object key : keys) {
+            String name = (String) key;
             Class clazz = beans.get(name).getClass();
             if (type.isAssignableFrom(clazz)) {
                 //log4jCategory.debug("Added " + name + " of type " + type);
